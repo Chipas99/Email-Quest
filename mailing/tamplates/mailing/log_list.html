@@ -1,0 +1,47 @@
+{% extends 'mailing/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <a href="{% url 'mailing:mailings_create' %}" class="btn btn-success">Добавить рассылку</a>
+</div>
+
+<div class="container">
+    {% for data in mailing_data %}
+    <div class="card-deck mb-3 text-center">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h6 class="my-0 font-weight-normal">{{ data.log.mailing }}</h6>
+                <h6 class="my-0 font-weight-normal">Время начала: {{ data.log.mailing.start|date:"Y-m-d H:i" }}</h6>
+            </div>
+            <div class="card-body">
+                <details>
+                    <summary>Подробности</summary>
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Время последней попытки: {{ data.log.attempt_time }}</li>
+                        <li>Статус попытки рассылки: {{ data.log.status }}</li>
+                        <li>Ответ почтового сервера: {{ data.log.server_response }}</li>
+                    </ul>
+
+                    <hr>
+
+                    <ul class="list-unstyled mt-3 mb-4">
+                        {% for recipient_data in data.recipients_data %}
+                        <li>Почтовый ящик: {{ recipient_data.email }} (ФИО: {{ recipient_data.initials }})</li>
+                        {% endfor %}
+                    </ul>
+                </details>
+
+                <div class="btn-group">
+                    <a href="{% url 'mailing:log_detail' data.log.pk %}" type="button"
+                        class="btn btn-sm btn-outline-success">Посмотреть</a>
+                    <a href="{% url 'mailing:log_delete' data.log.pk %}" type="button"
+                        class="btn btn-sm btn-outline-success">Удалить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

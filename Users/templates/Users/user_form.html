@@ -1,0 +1,35 @@
+{% extends 'mailing/base.html' %}
+
+{% block content %}
+<section class="jumbotron text-center">
+    <div class="container">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                {% if object %}
+                                {% if not perms.Users.set_is_activated %}
+                                <a href="{% url 'Users:password_change' %}" class="btn btn-warning">Сменить пароль</a>
+                                {% endif %}
+                                {% endif %}
+                                <button type="submit" class="btn btn-success">
+                                    {% if object %}
+                                    Сохранить изменения
+                                    {% else %}
+                                    Создать
+                                    {% endif %}
+                                </button>
+                                <a href="{% url 'Users:user_list' %}" class="btn btn-primary">Отмена</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

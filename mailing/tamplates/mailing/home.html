@@ -1,0 +1,120 @@
+{% extends 'mailing/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card-deck mb-3 text-center">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Рассылки</h4>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-end mt-auto">
+                    <ol class="list-group list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <small class="text-body-secondary">Количество рассылок всего:</small>
+                                <span class="badge bg-success rounded-pill">{{ mailings_count }}</span>
+                                <hr class="my-1 "> <!-- Горизонтальный разделитель -->
+                                <small class="text-body-secondary">Количество со статусом "активна":</small>
+                                <span class="badge bg-success rounded-pill">{{ active_mailings_count }}</span>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="card-footer">
+                {% if user.is_superuser or not user.groups.exists %}
+                {% if user.is_authenticated %}
+                <a href="{% url 'mailing:mailings_create' %}" class="btn btn-lg btn-block btn-outline-success">Добавить
+                    рассылку</a>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Клиенты</h4>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-end mt-auto">
+                    <ol class="list-group list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <small class="text-body-secondary">Количество уникальных клиентов:</small>
+                                <span class="badge bg-success rounded-pill">{{ unique_clients_count }}</span>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="card-footer">
+                {% if user.is_superuser or not user.groups.exists %}
+                {% if user.is_authenticated %}
+                <a href="{% url 'mailing:client_create' %}" class="btn btn-lg btn-block btn-outline-success">Добавить
+                    клиента</a>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Пользователи</h4>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-end mt-auto">
+                    <ol class="list-group list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <small class="text-body-secondary">Количество пользователей:</small>
+                                <span class="badge bg-success rounded-pill">{{ unique_users_count }}</span>
+                                <hr class="my-1 "> <!-- Горизонтальный разделитель -->
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="card-footer">
+                {% if user.is_superuser or not user.groups.exists %}
+                {% if user.is_authenticated %}
+                <a class="btn btn-lg btn-block btn-outline-success"
+                    href="{% url 'users:register' %}">Зарегистрироваться</a>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% if blogpost_list %}
+    <hr class="my-4"> <!-- Горизонтальный разделитель -->
+    <h4 class="text-center">Публикации нашего блога:</h4>
+    <hr class="my-4"> <!-- Горизонтальный разделитель -->
+    <div class="card-deck mb-3 text-center">
+        {% for post in blogpost_list %}
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">{{ post.title | truncatechars:33 }}</h4>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mt-3 mb-4">
+                    <li>{{ post.content | truncatechars:111 }}</li>
+                </ul>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-end mt-auto">
+                    <ol class="list-group list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <small class="text-body-secondary">Просмотры:</small>
+                                <span class="badge bg-success rounded-pill">{{ post.views_count }}</span>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

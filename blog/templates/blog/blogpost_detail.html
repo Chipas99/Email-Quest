@@ -1,0 +1,46 @@
+{% extends 'mailing/base.html' %}
+
+{% load blog_tags %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card-deck mb-3 text-center">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <div class="d-flex justify-content-end mt-auto">
+                    <ol class="list-group list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <small class="text-body-secondary">Просмотры:</small>
+                            </div>
+                            <span class="badge bg-success rounded-pill">{{ object.views_count }}</span>
+                        </li>
+                    </ol>
+                </div>
+                <h4 class="card-title">{{ object.title }}</h4>
+            </div>
+            <div class="card-body">
+                <img src="{% media_tag object.preview %}" class="img-fluid rounded-start" alt="Image">
+                <hr>
+                <p class="card-text">{{ object.content }}</p>
+            </div>
+
+            <div class="card-footer">
+                <div class="d-flex w-100 justify-content-between">
+                    <small class="text-body-secondary">Дата публикации: {{ object.date_create }}</small>
+                </div>
+                <div class="btn-group">
+                    <a href="{% url 'blog:post_list' %}" class="btn btn-sm btn-outline-success">К списку</a>
+                    {% if user.is_superuser or user.groups.exists %}
+                    <a href="{% url 'blog:post_update' object.pk %}"
+                        class="btn btn-sm btn-outline-success">Редактировать</a>
+                    <a href="{% url 'blog:post_delete' object.pk %}" class="btn btn-sm btn-outline-success">Удалить</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'mailing/base.html' %}
+
+
+{% block content %}
+
+<div class="container">
+    <a href="{% url 'blog:post_create' %}" class="btn btn-success">Добавить запись</a>
+</div>
+
+<div class="container">
+
+    {% for object in object_list %}
+
+    <div class="card-deck mb-3 text-center">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <div class="d-flex justify-content-end mt-auto">
+                    <ol class="list-group list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <small class="text-body-secondary">Просмотры:</small>
+                            </div>
+                            <span class="badge bg-success rounded-pill">{{ object.views_count }}</span>
+                        </li>
+                    </ol>
+                </div>
+                <h4 class="card-title">{{ object.title }}</h4>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ object.content | truncatechars:111 }}</p>
+            </div>
+
+            <div class="card-footer">
+                <div class="d-flex w-100 justify-content-between">
+                    <small class="text-body-secondary">Дата публикации: {{ object.date_create }}</small>
+                </div>
+                <div class="btn-group">
+                    <a href="{% url 'blog:post_view' object.pk %}" class="btn btn-sm btn-outline-success">Просмотр
+                        записи</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'mailing/base.html' %}
+
+{% block content %}
+<div class="row text-center">
+    <div class="col-12">
+        <h4>Произошла ошибка при попытке завершения регистрации. Повторите попытку снова.</h4>
+        <a class="p-2 btn btn-outline-success" href="{% url 'Users:register' %}">Зарегистрироваться</a>
+    </div>
+</div>
+{% endblock %}

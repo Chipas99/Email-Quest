@@ -1,0 +1,38 @@
+{% extends 'mailing/base.html' %}
+
+{% load tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% for object in object_list %}
+        <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    {% if object.is_active %}
+                    <small class="text-success">Активирован</small>
+                    {% else %}
+                    <small class="text-danger">Заблокирован</small>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">Пользователь номер: {{ object.id }}</h4>
+                    <img src="{% media_tag object.avatar %}" class="img-fluid rounded-start" alt="Image"
+                        style="width: 100%;">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Имя пользователя: {{ object.first_name|default:"не указано" }}</li>
+                        <li>Фамилия пользователя: {{ object.last_name|default:"не указана" }}</li>
+                        <li>Почта пользователя: {{ object.email|default:"не указана" }}</li>
+                        <li>Телефон пользователя: {{ object.phone|default:"не указан" }}</li>
+                    </ul>
+                    <div class="btn-group">
+                        <a href="{% url 'Users:user_detail' object.pk %}"
+                            class="btn btn-sm btn-outline-primary">Подробности</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

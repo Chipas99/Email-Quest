@@ -1,0 +1,39 @@
+{% extends 'mailing/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <a href="{% url 'mailing:mail_create' %}" class="btn btn-success">Добавить письмо для рассылки</a>
+</div>
+
+<div class="container">
+    {% for object in object_list %}
+    <div class="card-deck mb-3 text-center">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Письмо номер: {{ object.id }}</h4>
+            </div>
+            <div class="card-body">
+                <details>
+                    <summary>Подробности</summary>
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Тема письма: {{ object.subject }}</li>
+                        <li>Содержимое письма: {{ object.content }}</li>
+                    </ul>
+                </details>
+
+                <div class="btn-group">
+                    <a href="{% url 'mailing:mail_detail' object.pk %}" type="button"
+                        class="btn btn-sm btn-outline-success">Посмотреть</a>
+                    <a href="{% url 'mailing:mail_update' object.pk %}" type="button"
+                        class="btn btn-sm btn-outline-success">Редактировать</a>
+                    <a href="{% url 'mailing:mail_delete' object.pk %}" type="button"
+                        class="btn btn-sm btn-outline-success">Удалить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

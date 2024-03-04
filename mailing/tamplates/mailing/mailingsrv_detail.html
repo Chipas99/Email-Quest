@@ -1,0 +1,57 @@
+{% extends 'mailing/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card-deck mb-3 text-center">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Рассылка номер: {{ object.id }}</h4>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mt-3 mb-4">
+                    <li>Периодичность рассылки: {{ object.frequency }}</li>
+                    <li>Время начала рассылки: {{ object.start }}</li>
+                    <li>Время следующей рассылки: {{ object.next }}</li>
+                    <li>Время завершения рассылки: {{ object.finish }}</li>
+                    <li>Статус рассылки: {{ object.status }}</li>
+                </ul>
+
+                <hr>
+
+                <ul class="list-unstyled mt-3 mb-4">
+                    {% for recipient_data in mailing_data.0.recipients_data %}
+                    {% if mail_subject %}
+                    <li>Тема письма: {{ mail_subject }}</li>
+                    {% else %}
+                    <li>Письмо не назначено</li>
+                    {% endif %}
+                    <li>Почтовый ящик: {{ recipient_data.email }} (ФИО: {{ recipient_data.initials }})</li>
+                    {% endfor %}
+                </ul>
+
+
+                <div class="btn-group">
+
+                    {% if perms.mailing.set_is_activated %}
+                    <a href="{% url 'mailing:mailings_custom_update' object.pk %}" type="button"
+                        class="btn btn-sm btn-outline-success">Редактировать</a>
+
+                    <a href="{% url 'mailing:mailings_list' %}" type="button" class="btn btn-sm btn-outline-success">К
+                        списку</a>
+                    {% else %}
+                    <a href="{% url 'mailing:mailings_delete' object.pk %}" type="button"
+                        class="btn btn-sm btn-outline-success">Удалить</a>
+                    <a href="{% url 'mailing:mailings_update' object.pk %}" type="button"
+                        class="btn btn-sm btn-outline-success">Редактировать</a>
+                    <a href="{% url 'mailing:mailings_list' %}" type="button" class="btn btn-sm btn-outline-success">К
+                        списку</a>
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

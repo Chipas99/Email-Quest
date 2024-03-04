@@ -1,0 +1,28 @@
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+    <h2 class="my-0 mr-md-auto font-weight-normal">Сервис рассылок</h2>
+    <nav class="my-2 my-md-0 mr-md-3">
+        <a href="{% url 'mailing:home' %}" class="p-2 btn btn-outline-success">Главная</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'mailing:mailings_list' %}" class="p-2 btn btn-outline-success">Рассылки</a>
+
+        {% if user.is_superuser or not user.groups.exists %}
+        <a href="{% url 'mailing:mail_list' %}" class="p-2 btn btn-outline-success">Письма</a>
+        <a href="{% url 'mailing:client_list' %}" class="p-2 btn btn-outline-success">Клиенты</a>
+        <a href="{% url 'mailing:log_list' %}" class="p-2 btn btn-outline-success">Отчеты</a>
+        {% endif %}
+        {% endif %}
+        <a href="{% url 'blog:post_list' %}" class="p-2 btn btn-outline-success">Блог</a>
+
+        {% if user.is_authenticated %}
+            {% if user.is_superuser or user.groups.exists %}
+                <a class="p-2 btn btn-outline-success" href="{% url 'users:user_list' %}">Пользователи</a>
+            {% endif %}
+
+            <a class="p-2 btn btn-warning" href="{% url 'users:logout' %}">Выйти</a>
+        {% else %}
+            <a class="p-2 btn btn-outline-success" href="{% url 'users:register' %}">Зарегистрироваться</a>
+            <a class="p-2 btn btn-success" href="{% url 'users:login' %}">Войти</a>
+        {% endif %}
+
+    </nav>
+</div>
