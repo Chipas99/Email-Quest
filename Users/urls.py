@@ -2,8 +2,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from Users.apps import UsersConfig
-from Users.views import LoginView, LogoutView, RegisterView, get_verification, RegisterInfo, UserListView, \
-    UserUpdateView, UserDetailView, UserDeleteView, PasswordResetView, UserPasswordChangeView, PasswordResetDoneView, \
+from Users.views import LoginView, LogoutView, RegisterView, get_verification, RegisterInfo, UserListView, UserDetailView, UserDeleteView, PasswordResetView, UserPasswordChangeView, PasswordResetDoneView, \
     PasswordResetCompleteView, MyPasswordResetConfirmView, UserCustomUpdateView
 
 app_name = UsersConfig.name
@@ -21,7 +20,6 @@ urlpatterns = [
         template_name='Users/verification_reject.html'),
         name='verification_reject'),
     path('user_list/', UserListView.as_view(), name='user_list'),
-    path('user_update/<int:pk>/', UserUpdateView.as_view(), name='user_update'),
     path('user_custom_update/<int:pk>/', UserCustomUpdateView.as_view(), name='user_custom_update'),
     path('user_detail/<int:pk>/', UserDetailView.as_view(), name='user_detail'),
     path('user_delete/<int:pk>/', UserDeleteView.as_view(), name='user_delete'),

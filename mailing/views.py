@@ -22,22 +22,6 @@ class OwnerSuperuserMixin:
             raise Http404
         return self.object
 
-
-class BaseContextMixin:
-    phrases = [
-        "Почтовая рассылка: отправка сообщений и уведомлений по электронной почте.",
-        "Автоматизация рассылок: возможность настроить автоматическую отправку сообщений по определенным событиям "
-        "или расписанию.",
-        "Управление подписчиками: возможность добавлять и удалять подписчиков, управлять списками рассылок и "
-        "сегментировать аудиторию.",
-        "Шаблоны и персонализация: создание и использование шаблонов для удобного оформления сообщений, "
-        "а также возможность персонализации контента для каждого получателя."
-        "Аналитика и отчетность: предоставление статистики о доставке, открытии и кликах в сообщениях, "
-        "а также возможность создания отчетов для оценки эффективности рассылок."
-        "Сегментация аудитории: возможность разделить аудиторию на группы и отправлять сообщения только "
-        "определенным сегментам."
-    ]
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         random_phrase = random.choice(self.phrases)
@@ -45,11 +29,11 @@ class BaseContextMixin:
         return context
 
 
-class MainPage(BaseContextMixin, TemplateView):
+class MainPage(TemplateView):
     template_name = 'mailing/home.html'
 
     extra_context = {
-        'phrases': BaseContextMixin.phrases,
+
     }
 
     def get_context_data(self, **kwargs):
@@ -69,22 +53,22 @@ class MainPage(BaseContextMixin, TemplateView):
         return context
 
 
-class MailingSrvListView(LoginRequiredMixin, BaseContextMixin, ListView):
+class MailingSrvListView(LoginRequiredMixin, ListView):
     model = MailingSrv
     login_url = 'users:login'
     extra_context = {
         'title': 'Список рассылок',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
 
-class MailingSrvCreateView(BaseContextMixin, CreateView):
+class MailingSrvCreateView(CreateView):
     model = MailingSrv
     form_class = MailingSrvForm
 
     extra_context = {
         'title': 'Создание новой рассылки',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_form_kwargs(self):
@@ -103,13 +87,13 @@ class MailingSrvCreateView(BaseContextMixin, CreateView):
         return reverse('mailing:mailings_list')
 
 
-class MailingSrvUpdateView(UserPassesTestMixin, BaseContextMixin, UpdateView):
+class MailingSrvUpdateView(UserPassesTestMixin, UpdateView):
     model = MailingSrv
     form_class = MailingSrvForm
 
     extra_context = {
         'title': 'Редактирование рассылки',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_form_kwargs(self):
@@ -126,26 +110,26 @@ class MailingSrvUpdateView(UserPassesTestMixin, BaseContextMixin, UpdateView):
         return self.request.user == MailingSrv.objects.get(pk=self.kwargs['pk']).owner
 
 
-class MailingSrvCustomUpdateView(LoginRequiredMixin, PermissionRequiredMixin, BaseContextMixin, UpdateView):
+class MailingSrvCustomUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = MailingSrv
     form_class = MailingSrvCustomForm
     permission_required = 'mailing.set_is_activated'
 
     extra_context = {
         'title': 'Редактирование рассылки',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_success_url(self):
         return reverse('mailing:mailings_detail', args=[self.object.pk])
 
 
-class MailingSrvDetailView(BaseContextMixin, DetailView):
+class MailingSrvDetailView(DetailView):
     model = MailingSrv
 
     extra_context = {
         'title': 'Детали рассылки',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_context_data(self, **kwargs):
@@ -163,22 +147,22 @@ class MailingSrvDetailView(BaseContextMixin, DetailView):
         return context
 
 
-class MailingSrvDeleteView(BaseContextMixin, DeleteView):
+class MailingSrvDeleteView(DeleteView):
     model = MailingSrv
     success_url = reverse_lazy('mailing:mailings_list')
 
     extra_context = {
         'title': 'Удаление рассылки',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
 
-class MailListView(LoginRequiredMixin, BaseContextMixin, ListView):
+class MailListView(LoginRequiredMixin, ListView):
     model = Mail
     login_url = 'users:login'
     extra_context = {
         'title': 'Список писем',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_queryset(self, *args, **kwargs):
@@ -190,13 +174,13 @@ class MailListView(LoginRequiredMixin, BaseContextMixin, ListView):
         return queryset
 
 
-class MailCreateView(BaseContextMixin, CreateView):
+class MailCreateView(CreateView):
     model = Mail
     form_class = MailForm
     success_url = reverse_lazy('mailing:mail_list')
     extra_context = {
         'title': 'Создание письма',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_form_kwargs(self):
@@ -211,12 +195,12 @@ class MailCreateView(BaseContextMixin, CreateView):
         return super().form_valid(form)
 
 
-class MailUpdateView(OwnerSuperuserMixin, BaseContextMixin, UpdateView):
+class MailUpdateView(OwnerSuperuserMixin, UpdateView):
     model = Mail
     form_class = MailForm
     extra_context = {
         'title': 'Редактирование письма',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_form_kwargs(self):
@@ -228,29 +212,29 @@ class MailUpdateView(OwnerSuperuserMixin, BaseContextMixin, UpdateView):
         return reverse('mailing:mail_detail', args=[self.kwargs.get('pk')])
 
 
-class MailDetailView(OwnerSuperuserMixin, BaseContextMixin, DetailView):
+class MailDetailView(OwnerSuperuserMixin, DetailView):
     model = Mail
     extra_context = {
         'title': 'Просмотр письма',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
 
-class MailDeleteView(OwnerSuperuserMixin, BaseContextMixin, DeleteView):
+class MailDeleteView(OwnerSuperuserMixin, DeleteView):
     model = Mail
     success_url = reverse_lazy('mailing:mail_list')
     extra_context = {
         'title': 'Удаление письма',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
 
-class ClientListView(LoginRequiredMixin, BaseContextMixin, ListView):
+class ClientListView(LoginRequiredMixin, ListView):
     model = Client
     login_url = 'users:login'
     extra_context = {
         'title': 'Список клиентов',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_queryset(self, *args, **kwargs):
@@ -262,13 +246,13 @@ class ClientListView(LoginRequiredMixin, BaseContextMixin, ListView):
         return queryset
 
 
-class ClientCreateView(BaseContextMixin, CreateView):
+class ClientCreateView(CreateView):
     model = Client
     form_class = ClientForm
     success_url = reverse_lazy('mailing:client_list')
     extra_context = {
         'title': 'Добавить клиента',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def form_valid(self, form):
@@ -278,41 +262,41 @@ class ClientCreateView(BaseContextMixin, CreateView):
         return super().form_valid(form)
 
 
-class ClientUpdateView(OwnerSuperuserMixin, BaseContextMixin, UpdateView):
+class ClientUpdateView(OwnerSuperuserMixin, UpdateView):
     model = Client
     form_class = ClientForm
     extra_context = {
         'title': 'Редактирование клиента',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_success_url(self):
         return reverse('mailing:client_detail', args=[self.kwargs.get('pk')])
 
 
-class ClientDetailView(OwnerSuperuserMixin, BaseContextMixin, DetailView):
+class ClientDetailView(OwnerSuperuserMixin, DetailView):
     model = Client
     extra_context = {
         'title': 'Просмотр клиента',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
 
-class ClientDeleteView(OwnerSuperuserMixin, BaseContextMixin, DeleteView):
+class ClientDeleteView(OwnerSuperuserMixin, DeleteView):
     model = Client
     success_url = reverse_lazy('mailing:client_list')
     extra_context = {
         'title': 'Удаление клиента',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
 
-class LogListView(LoginRequiredMixin, BaseContextMixin, ListView):
+class LogListView(LoginRequiredMixin, ListView):
     model = Log
     login_url = 'users:login'
     extra_context = {
         'title': 'Отчеты по рассылкам',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_queryset(self):
@@ -333,11 +317,11 @@ class LogListView(LoginRequiredMixin, BaseContextMixin, ListView):
         return context
 
 
-class LogDetailView(BaseContextMixin, DetailView):
+class LogDetailView(DetailView):
     model = Log
     extra_context = {
         'title': 'Отчет по рассылке',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_context_data(self, **kwargs):
@@ -349,12 +333,12 @@ class LogDetailView(BaseContextMixin, DetailView):
         return context
 
 
-class LogDeleteView(BaseContextMixin, DeleteView):
+class LogDeleteView(DeleteView):
     model = Log
     success_url = reverse_lazy('mailing:log_list')
     extra_context = {
         'title': 'Удаление отчета',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
 

@@ -12,18 +12,17 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, TemplateView, ListView, UpdateView, DetailView, DeleteView
 
-from mailing.views import BaseContextMixin
 from Users.forms import LoginViewForm, UserRegisterForm, UserUpdateForm, UserPasswordForm, UserUpdateCustomForm
 from Users.models import User
 
 
-class LoginView(BaseContextMixin, BaseLoginView):
+class LoginView(BaseLoginView):
     model = User
     form_class = LoginViewForm
     template_name = 'Users/login.html'
     extra_context = {
         'title': 'Вход пользователя',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3'],
     }
     success_url = reverse_lazy('Users/home.html')
 
@@ -32,13 +31,13 @@ class LogoutView(BaseLogoutView):
     success_url = reverse_lazy('Users/login.html')
 
 
-class RegisterView(BaseContextMixin, CreateView):
+class RegisterView(CreateView):
     model = User
     form_class = UserRegisterForm
     template_name = 'Users/register.html'
     extra_context = {
         'title': 'Регистрация пользователя',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3'],
     }
 
     def form_valid(self, form):
@@ -71,6 +70,7 @@ class RegisterInfo(TemplateView):
 
     extra_context = {
         'title': 'Подтвердите регистрацию',
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_context_data(self, **kwargs):
@@ -80,21 +80,21 @@ class RegisterInfo(TemplateView):
         return context
 
 
-class UserListView(BaseContextMixin, ListView):
+class UserListView(ListView):
     model = User
     extra_context = {
         'title': 'Список пользователей сервиса',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
 
-class UserUpdateView(BaseContextMixin, UpdateView):
+class UserUpdateVie(UpdateView):
     model = User
     form_class = UserUpdateForm
 
     extra_context = {
         'title': 'Редактирование пользователя',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_success_url(self):
@@ -103,7 +103,6 @@ class UserUpdateView(BaseContextMixin, UpdateView):
 
 class UserCustomUpdateView(
         PermissionRequiredMixin,
-        BaseContextMixin,
         UpdateView):
     model = User
     form_class = UserUpdateCustomForm
@@ -111,31 +110,31 @@ class UserCustomUpdateView(
 
     extra_context = {
         'title': 'Редактирование пользователя',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_success_url(self):
         return reverse('Users:user_detail', args=[self.kwargs.get('pk')])
 
 
-class UserDetailView(BaseContextMixin, DetailView):
+class UserDetailView(DetailView):
     model = User
     extra_context = {
         'title': 'Просмотр пользователя',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
 
-class UserDeleteView(BaseContextMixin, DeleteView):
+class UserDeleteView(DeleteView):
     model = User
     success_url = reverse_lazy('Users:register')
     extra_context = {
         'title': 'Удаление пользователя',
-        'phrases': BaseContextMixin.phrases,
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
 
-class UserPasswordChangeView(BaseContextMixin, PasswordChangeView):
+class UserPasswordChangeView(PasswordChangeView):
     form_class = UserPasswordForm
     template_name = 'Users/password_change.html'
 

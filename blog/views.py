@@ -6,13 +6,13 @@ from django.views.generic import ListView, CreateView, UpdateView, DetailView, D
 from blog.forms import BlogpostForm
 from blog.models import Blogpost
 from blog.services import get_cache_blogposts
-from mailing.views import BaseContextMixin
 
 
-class BlogpostListView(BaseContextMixin, ListView):
+class BlogpostListView(ListView):
     model = Blogpost
     extra_context = {
-        'title': 'Публикации'
+        'title': 'Публикации',
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_queryset(self):
@@ -30,7 +30,6 @@ class BlogpostListView(BaseContextMixin, ListView):
 
 class BlogpostCreateView(
         PermissionRequiredMixin,
-        BaseContextMixin,
         CreateView):
     model = Blogpost
     form_class = BlogpostForm
@@ -38,17 +37,19 @@ class BlogpostCreateView(
     permission_required = 'blog.add_blogpost'
 
     extra_context = {
-        'title': 'Создание публикации'
+        'title': 'Создание публикации',
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def handle_no_permission(self):
         return redirect('mailing:access_denied')
 
 
-class BlogpostDetailView(BaseContextMixin, DetailView):
+class BlogpostDetailView(DetailView):
     model = Blogpost
     extra_context = {
-        'title': 'Публикация'
+        'title': 'Публикация',
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_object(self, queryset=None):
@@ -61,14 +62,14 @@ class BlogpostDetailView(BaseContextMixin, DetailView):
 
 class BlogpostUpdateView(
         PermissionRequiredMixin,
-        BaseContextMixin,
         UpdateView):
     model = Blogpost
     form_class = BlogpostForm
     permission_required = 'blog.change_blogpost'
 
     extra_context = {
-        'title': 'Редакция публикации'
+        'title': 'Редакция публикации',
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def get_success_url(self):
@@ -80,14 +81,14 @@ class BlogpostUpdateView(
 
 class BlogpostDeleteView(
         PermissionRequiredMixin,
-        BaseContextMixin,
         DeleteView):
     model = Blogpost
     success_url = reverse_lazy('blog:post_list')
     permission_required = 'blog.delete_blogpost'
 
     extra_context = {
-        'title': 'Удаление публикации'
+        'title': 'Удаление публикации',
+        'phrases': ['фраза1', 'фраза2', 'фраза3']
     }
 
     def handle_no_permission(self):
